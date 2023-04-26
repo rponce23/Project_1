@@ -1,11 +1,75 @@
-
 let APIkey='&api_key=4170ff1b36fe7e0cb0644c2f72de1f76';
 let base='https://api.themoviedb.org/3'
 let today = dayjs().format('YYYY-MM-DD')
-let secondurl='/discover/movie?primary_release_date.gte=2013-03-10&primary_release_date.lte='+today;
+let secondurl='/discover/movie?primary_release_date.gte=2013-04-10&primary_release_date.lte='+today;
 let url=base+secondurl+APIkey;
 let movieEl = document.getElementById('movies')
 let imgBaseUrl = "https://image.tmdb.org/t/p/w500"
+let cineBar = document.getElementById('navbar')
+let routingAPIkey = 'IWlwFtnFKKA6voxvGd7uWEcCNXeuXtI4'
+let geoUrl = "https://api.tomtom.com/search/2/geocode/monterrey.json?key=IWlwFtnFKKA6voxvGd7uWEcCNXeuXtI4&entityTypeSet=Municipality&countrySet=MX"
+let btnEl = document.getElementById('btn')
+let inputEl = document.querySelector('input')
+let city;
+let APIroutes = "S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y"
+let urlRoutes;
+let urlRoutesAPI;
+let lat;
+let lat1
+let lon;
+let lon1;
+let center;
+let map;
+let storedCities = JSON.parse(localStorage.getItem("city"));
+let array=[];
+let cities = document.getElementById('cities');
+
+if(storedCities!==null){
+  array=storedCities;
+  for(let i=0; i<storedCities.length; i++){ 
+    cities.innerHTML+=`<button class="bg-slate-700 rounded-md my-2 text-white" id="${storedCities[i]}">${storedCities[i]}</button>` 
+}  
+}
+
+cities.addEventListener("click", function(event){ 
+  if(event.target !== event.currentTarget){ 
+      city = event.target.id; 
+      geoUrl = "https://api.tomtom.com/search/2/geocode/"+city+".json?key=IWlwFtnFKKA6voxvGd7uWEcCNXeuXtI4&entityTypeSet=Municipality&countrySet=MX"
+      tomtomGeocoding(geoUrl)
+  }
+})
+
+btnEl.addEventListener('click',function(){
+    console.log(inputEl.value)
+    city=inputEl.value;
+    inputEl.value='';
+    geoUrl = "https://api.tomtom.com/search/2/geocode/"+city+".json?key=IWlwFtnFKKA6voxvGd7uWEcCNXeuXtI4&entityTypeSet=Municipality&countrySet=MX"
+    tomtomGeocoding(geoUrl)
+})
+
+
+  function tomtomGeocoding(geoUrl) {
+    fetch(geoUrl)
+      .then(function (response) {
+        response.json().then(function (data){
+          
+        console.log(data.results[0].position.lat)
+        console.log(data.results[0].position.lon)
+        lat=data.results[0].position.lat;
+        lon=data.results[0].position.lon;
+        urlRoutes= "https://api.tomtom.com/search/2/categorySearch/cinema.json?key=S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y&lat="+lat+"&lon="+lon+"&radius=4000";
+        tomtomAPI(urlRoutes);
+        center=[lon,lat];
+        map = tt.map({
+          key:APIroutes,
+          container:"map",
+          center: center,
+          zoom: 10
+        })
+        })
+      });
+  }
+
 
 function TMDB(url) {
     fetch(url)
@@ -19,8 +83,8 @@ function TMDB(url) {
 
 
 function displayMovies(movies){
-
 for(let i=0; i<movies.length;i++){
+
   movieEl.innerHTML+=`
                       <div class="flex">
                         <img class="rounded-xl h-80 my-5" src="${imgBaseUrl+movies[i].poster_path}"/>
@@ -30,24 +94,11 @@ for(let i=0; i<movies.length;i++){
                           <p class="font-bold">Summary</p>
                           <p>${movies[i].overview}</p>
                         </div>
-                      </div>
-`
-}
-
+                      </div>`
+  }
 }
 
 TMDB(url);
-
-
-let APIroutes = "S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y"
-let urlRoutes;
-let urlRoutesAPI;
-let lat;
-let lat1
-let lon;
-let lon1;
-let center;
-let map;
 
 const options = {
   enableHighAccuracy: true,
@@ -60,12 +111,12 @@ function success(pos) {
 
   lat=crd.latitude;
   lon=crd.longitude;
+  reverseGeocodingUrl = "https://api.tomtom.com/search/2/reverseGeocode/"+lat+","+lon+".json?key=S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y&radius=100"
+  reverseGeocoding(reverseGeocodingUrl);
   urlRoutes= "https://api.tomtom.com/search/2/categorySearch/cinema.json?key=S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y&lat="+lat+"&lon="+lon+"&radius=4000";
   tomtomAPI(urlRoutes);
   center = [lon,lat]
   console.log(lon+","+lat+":52.50274,13.43872");
-  //urlRoutesAPI = "https://api.tomtom.com/routing/1/calculateRoute/"+lon+","+lat+":52.50274,13.43872/json?instructionsType=text&language=en-US&vehicleHeading=90&sectionType=traffic&report=effectiveSettings&routeType=eco&traffic=true&avoid=unpavedRoads&travelMode=car&vehicleMaxSpeed=120&vehicleCommercial=false&vehicleEngineType=combustion&key=IWlwFtnFKKA6voxvGd7uWEcCNXeuXtI4";
-  //tomtomRoutes(urlRoutesAPI);
     map = tt.map({
     key:APIroutes,
     container:"map",
@@ -89,6 +140,16 @@ function tomtomAPI(urlRoutes) {
       .then(function (response) {
         response.json().then(function (data){
         console.log(data.results)
+        if(!array.includes(city)){
+          array.push(city)
+          localStorage.setItem("city", JSON.stringify(array))
+          storedCities = JSON.parse(localStorage.getItem("city"))
+          cities.innerHTML=''
+          for(let i=0; i<storedCities.length; i++){
+              cities.innerHTML+=`<button class="bg-slate-700 rounded-md my-2 text-white" id="${storedCities[i]}">${storedCities[i]}</button>`
+          }
+      }
+        //cinemaBar(data.results)
         map.on('load', ()=>{
           new tt.Marker().setLngLat(center).addTo(map)
           for(let i =0; i<data.results.length;i++){
@@ -106,17 +167,26 @@ function tomtomAPI(urlRoutes) {
       });
   }
 
-let routingAPIkey = 'IWlwFtnFKKA6voxvGd7uWEcCNXeuXtI4'
 
-  function tomtomRoutes(urlRoutesAPI) {
-    fetch(urlRoutesAPI)
-      .then(function (response) {
-        response.json().then(function (data){
+function reverseGeocoding(url) {
+  fetch(url)
+    .then(function (response) {
+      response.json().then(function (data){
+        console.log(data.addresses[0].address.municipality)
+        city=data.addresses[0].address.municipality;
+      })
+    });
+}
+  
+  
 
-        console.log(data)
-        })
-      });
-  }
-
-
-
+ /* function cinemaBar(cinema){
+    let arr = [];
+    for(let i=0; cinema.length; i++){
+      console.log(arr.includes(cinema[i].poi.url))
+      if(cinema[i].poi.url && /*!arr.includes(cinema[i].poi.url)){
+        console.log(cinema[i].poi.url)
+      }
+    }
+  }*/
+ 
