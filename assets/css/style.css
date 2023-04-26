@@ -2,11 +2,7 @@ h1{
     text-align: center;
 }
 
+
 #map{
     text-align: center;
-}
-
-main{
-    display: flex;
-    justify-content: center;
 }

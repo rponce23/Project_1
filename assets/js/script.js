@@ -1,26 +1,42 @@
-/*
+
 let APIkey='&api_key=4170ff1b36fe7e0cb0644c2f72de1f76';
 let base='https://api.themoviedb.org/3'
 let today = dayjs().format('YYYY-MM-DD')
-let secondurl='/discover/movie?primary_release_date.gte=2014-09-15&primary_release_date.lte='+today;
-
-// today = dayjs().format('YYYY-MM-DD')
-
-//console.log(today)
-
+let secondurl='/discover/movie?primary_release_date.gte=2013-03-10&primary_release_date.lte='+today;
 let url=base+secondurl+APIkey;
-function getAPI(url) {
+let movieEl = document.getElementById('movies')
+let imgBaseUrl = "https://image.tmdb.org/t/p/w500"
+
+function TMDB(url) {
     fetch(url)
       .then(function (response) {
         response.json().then(function (data){
-
-        // console.log(data)
+         console.log(data)
+         displayMovies(data.results)
         })
       });
   }
 
-  getAPI(url);
-*/
+
+function displayMovies(movies){
+
+for(let i=0; i<movies.length;i++){
+  movieEl.innerHTML+=`
+                      <div class="flex">
+                        <img class="rounded-xl h-80 my-5" src="${imgBaseUrl+movies[i].poster_path}"/>
+                        <div class="mx-5 my-5">
+                          <h3 class="font-sans font-bold">${movies[i].title}</h3>
+                          <p><span class="font-bold">Rating: </span>${movies[i].vote_average}</p>
+                          <p class="font-bold">Summary</p>
+                          <p>${movies[i].overview}</p>
+                        </div>
+                      </div>
+`
+}
+
+}
+
+TMDB(url);
 
 
 let APIroutes = "S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y"
