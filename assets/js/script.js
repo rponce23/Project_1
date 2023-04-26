@@ -52,7 +52,7 @@ btnEl.addEventListener('click',function(){
     fetch(geoUrl)
       .then(function (response) {
         response.json().then(function (data){
-          
+
         console.log(data.results[0].position.lat)
         console.log(data.results[0].position.lon)
         lat=data.results[0].position.lat;
@@ -149,7 +149,7 @@ function tomtomAPI(urlRoutes) {
               cities.innerHTML+=`<button class="bg-slate-700 rounded-md my-2 text-white" id="${storedCities[i]}">${storedCities[i]}</button>`
           }
       }
-        //cinemaBar(data.results)
+        cinemaBar(data.results)
         map.on('load', ()=>{
           new tt.Marker().setLngLat(center).addTo(map)
           for(let i =0; i<data.results.length;i++){
@@ -179,14 +179,15 @@ function reverseGeocoding(url) {
 }
   
   
-
- /* function cinemaBar(cinema){
+function cinemaBar(cinema){
     let arr = [];
-    for(let i=0; cinema.length; i++){
-      console.log(arr.includes(cinema[i].poi.url))
-      if(cinema[i].poi.url && /*!arr.includes(cinema[i].poi.url)){
+    cineBar.innerHTML=''
+    for(let i=0; i<cinema.length; i++){
+      if(cinema[i].poi.url && !arr.includes(cinema[i].poi.url)){
+        arr.push(cinema[i].poi.url)
         console.log(cinema[i].poi.url)
+        cineBar.innerHTML+=`<a target="_blank" href="${cinema[i].poi.url}"><button class="bg-slate-700 px-5 text-white mx-5 my-5 rounded-md ">${cinema[i].poi.name}</button></a>`
       }
     }
-  }*/
+  }
  
