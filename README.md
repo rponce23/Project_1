@@ -17,13 +17,13 @@ Be responsive.
 Have a polished UI.
 Be deployed to GitHub Pages.
 
-- [CSS-Framwork](#CSS-Framework)
-- [Interactive](#Interactive)
-- [API](#Server-Side-API)
-- [LocalStorage](#LocalStorage)
-- [Responsive](#Responsive)
-- [User-Interface](#User-Interface)
-- [Github-Deployed](#Github-Link)
+- [CSS-Framwork](#css-framework)
+- [Interactive](#interactive)
+- [API](#server-side-api)
+- [LocalStorage](#localstorage)
+- [Responsive](#responsive)
+- [User-Interface](#user-interface)
+- [Github-Deployed](#github-link)
 
 
 ## CSS-Framework
@@ -54,9 +54,9 @@ https://rponce23.github.io/Project_1/
 
 ## Credits
 
-Alejandro Salazar (https://github.com/Alexslzr)
-Carlos Campos (https://github.com/carloxweb)
-Raymundo Ponce (https://github.com/rponce23)
+Alejandro Salazar (https://github.com/Alexslzr)<br>
+Carlos Campos (https://github.com/carloxweb)<br>
+Raymundo Ponce (https://github.com/rponce23)<br>
 
 ## Images
 
