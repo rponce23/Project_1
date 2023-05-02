@@ -24,10 +24,10 @@ let cities = document.getElementById('cities');
 
 
 //if local storage not null, create a button element for each of the stored cities
-if(storedCities!==null){
+if (storedCities !== null) {
   array=storedCities;
   for(let i=0; i<storedCities.length; i++){ 
-    cities.innerHTML+=`<button class="bg-slate-700 rounded-md my-2 text-white" id="${storedCities[i]}">${storedCities[i]}</button>` 
+    cities.innerHTML+=`<button class="bg-slate-700 rounded-lg my-2 py-1 text-white hover:opacity-75" id="${storedCities[i]}">${storedCities[i]}</button>` 
 }  
 }
 
@@ -60,6 +60,7 @@ function tomtomGeocoding(geoUrl) {
       lon=data.results[0].position.lon;
       urlRoutes= "https://api.tomtom.com/search/2/categorySearch/cinema.json?key=S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y&lat="+lat+"&lon="+lon+"&radius=4000";
       tomtomAPI(urlRoutes);
+     
       center=[lon,lat];
       map = tt.map({
         key:APIroutes,
@@ -87,12 +88,14 @@ function displayMovies(movies){
 for(let i=0; i<movies.length;i++){
   movieEl.innerHTML+=`
                       <div class="flex">
-                        <img class="rounded-xl h-80 my-5" src="${imgBaseUrl+movies[i].poster_path}"/>
-                        <div class="mx-5 my-5">
-                          <h3 class="font-sans font-bold">${movies[i].title}</h3>
+                        <img class="rounded-xl h-80 my-5 hover:shadow-2xl hover:opacity-80" src="${imgBaseUrl+movies[i].poster_path}"/>
+                        <div class="mx-5 my-5 flex flex-col justify-around">
+                          <h3 class="font-sans font-bold text-2xl">${movies[i].title}</h3>
                           <p><span class="font-bold">Rating: </span>${movies[i].vote_average}</p>
-                          <p class="font-bold">Summary</p>
-                          <p>${movies[i].overview}</p>
+                          <div>
+                            <p class="font-bold">Summary</p>
+                            <p>${movies[i].overview}</p>
+                          </div>
                         </div>
                       </div>`
   }
@@ -142,7 +145,7 @@ function tomtomAPI(urlRoutes) {
             storedCities = JSON.parse(localStorage.getItem("city"))
             cities.innerHTML=''
             for(let i=0; i<storedCities.length; i++){
-                cities.innerHTML+=`<button class="bg-slate-700 rounded-md my-2 text-white" id="${storedCities[i]}">${storedCities[i]}</button>`
+                cities.innerHTML+=`<button class="bg-slate-700 rounded-md my-2 text-white hover:opacity-75" id="${storedCities[i]}">${storedCities[i]}</button>`
             } 
           }
           cinemaBar(data.results)
@@ -175,15 +178,8 @@ function reverseGeocoding(url) {
   
 function cinemaBar(cinema){
   let arr = [];
- // let cinemaLow; 
   cineBar.innerHTML=''
-  for(let i=0; i<cinema.length; i++){
-  
-    //console.log(cinema[i].poi.url)
-   /* if(cinema[i].poi.url){
-      cinemaLow = cinema[i].poi.url?.toLowerCase();
-    }*/
-    
+  for(let i=0; i<cinema.length; i++){  
     if(cinema[i].poi.url && !arr.includes(cinema[i].poi.url)){
       arr.push(cinema[i].poi.url)
       console.log(cinema[i].poi.url)
