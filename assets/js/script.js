@@ -183,7 +183,7 @@ function cinemaBar(cinema){
     if(cinema[i].poi.url && !arr.includes(cinema[i].poi.url)){
       arr.push(cinema[i].poi.url)
       console.log(cinema[i].poi.url)
-      cineBar.innerHTML+=`<a target="_blank" href="https://${cinema[i].poi.url}"><button class="bg-slate-700 px-5 text-white mx-5 my-5 rounded-md ">${cinema[i].poi.name}</button></a>`
+      cineBar.innerHTML+=`<a target="_blank" href="https://${cinema[i].poi.url}"><button class="bg-slate-700 px-5 text-white mx-5 my-5 rounded-md py-1 hover:opacity-75">${cinema[i].poi.name}</button></a>`
     }
   }
 }
