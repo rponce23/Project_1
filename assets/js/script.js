@@ -15,22 +15,23 @@ let APIroutes = "S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y"
 let urlRoutes;
 let urlRoutesAPI;
 let lat;
-let lat1
 let lon;
-let lon1;
 let center;
 let map;
 let storedCities = JSON.parse(localStorage.getItem("city"));
 let array=[];
 let cities = document.getElementById('cities');
 
-if(storedCities!==null){
+
+//if local storage not null, create a button element for each of the stored cities
+if (storedCities !== null) {
   array=storedCities;
   for(let i=0; i<storedCities.length; i++){ 
-    cities.innerHTML+=`<button class="bg-slate-700 rounded-md my-2 text-white" id="${storedCities[i]}">${storedCities[i]}</button>` 
+    cities.innerHTML+=`<button class="bg-slate-700 rounded-lg my-2 py-1 text-white hover:opacity-75" id="${storedCities[i]}">${storedCities[i]}</button>` 
 }  
 }
 
+//used to know which of the cities has been selected
 cities.addEventListener("click", function(event){ 
   if(event.target !== event.currentTarget){ 
       city = event.target.id; 
@@ -38,6 +39,7 @@ cities.addEventListener("click", function(event){
       tomtomGeocoding(geoUrl)
   }
 })
+
 
 btnEl.addEventListener('click',function(){
     console.log(inputEl.value)
@@ -48,27 +50,27 @@ btnEl.addEventListener('click',function(){
 })
 
 
-  function tomtomGeocoding(geoUrl) {
-    fetch(geoUrl)
-      .then(function (response) {
-        response.json().then(function (data){
-
-        console.log(data.results[0].position.lat)
-        console.log(data.results[0].position.lon)
-        lat=data.results[0].position.lat;
-        lon=data.results[0].position.lon;
-        urlRoutes= "https://api.tomtom.com/search/2/categorySearch/cinema.json?key=S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y&lat="+lat+"&lon="+lon+"&radius=4000";
-        tomtomAPI(urlRoutes);
-        center=[lon,lat];
-        map = tt.map({
-          key:APIroutes,
-          container:"map",
-          center: center,
-          zoom: 10
-        })
-        })
-      });
-  }
+function tomtomGeocoding(geoUrl) {
+  fetch(geoUrl)
+    .then(function (response) {
+      response.json().then(function (data){
+      console.log(data.results[0].position.lat)
+      console.log(data.results[0].position.lon)
+      lat=data.results[0].position.lat;
+      lon=data.results[0].position.lon;
+      urlRoutes= "https://api.tomtom.com/search/2/categorySearch/cinema.json?key=S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y&lat="+lat+"&lon="+lon+"&radius=4000";
+      tomtomAPI(urlRoutes);
+     
+      center=[lon,lat];
+      map = tt.map({
+        key:APIroutes,
+        container:"map",
+        center: center,
+        zoom: 10
+      })
+      })
+    });
+}
 
 
 function TMDB(url) {
@@ -79,25 +81,25 @@ function TMDB(url) {
          displayMovies(data.results)
         })
       });
-  }
+}
 
 
 function displayMovies(movies){
 for(let i=0; i<movies.length;i++){
-
   movieEl.innerHTML+=`
                       <div class="flex">
-                        <img class="rounded-xl h-80 my-5" src="${imgBaseUrl+movies[i].poster_path}"/>
-                        <div class="mx-5 my-5">
-                          <h3 class="font-sans font-bold">${movies[i].title}</h3>
+                        <img class="rounded-xl h-80 my-5 hover:shadow-2xl hover:opacity-80" src="${imgBaseUrl+movies[i].poster_path}"/>
+                        <div class="mx-5 my-5 flex flex-col justify-around">
+                          <h3 class="font-sans font-bold text-2xl">${movies[i].title}</h3>
                           <p><span class="font-bold">Rating: </span>${movies[i].vote_average}</p>
-                          <p class="font-bold">Summary</p>
-                          <p>${movies[i].overview}</p>
+                          <div>
+                            <p class="font-bold">Summary</p>
+                            <p>${movies[i].overview}</p>
+                          </div>
                         </div>
                       </div>`
   }
 }
-
 TMDB(url);
 
 const options = {
@@ -116,15 +118,12 @@ function success(pos) {
   urlRoutes= "https://api.tomtom.com/search/2/categorySearch/cinema.json?key=S4UzPeG7IlMqPo9isVNMWntTGfEr5s0Y&lat="+lat+"&lon="+lon+"&radius=4000";
   tomtomAPI(urlRoutes);
   center = [lon,lat]
-  console.log(lon+","+lat+":52.50274,13.43872");
     map = tt.map({
     key:APIroutes,
     container:"map",
     center: center,
     zoom: 10
   })
-
- 
 }
 
 
@@ -139,30 +138,28 @@ function tomtomAPI(urlRoutes) {
     fetch(urlRoutes)
       .then(function (response) {
         response.json().then(function (data){
-        console.log(data.results)
-        if(!array.includes(city)){
-          array.push(city)
-          localStorage.setItem("city", JSON.stringify(array))
-          storedCities = JSON.parse(localStorage.getItem("city"))
-          cities.innerHTML=''
-          for(let i=0; i<storedCities.length; i++){
-              cities.innerHTML+=`<button class="bg-slate-700 rounded-md my-2 text-white" id="${storedCities[i]}">${storedCities[i]}</button>`
+          console.log(data.results)
+          if(!array.includes(city)){
+            array.push(city)
+            localStorage.setItem("city", JSON.stringify(array))
+            storedCities = JSON.parse(localStorage.getItem("city"))
+            cities.innerHTML=''
+            for(let i=0; i<storedCities.length; i++){
+                cities.innerHTML+=`<button class="bg-slate-700 rounded-md my-2 text-white hover:opacity-75" id="${storedCities[i]}">${storedCities[i]}</button>`
+            } 
           }
-      }
-        cinemaBar(data.results)
-        map.on('load', ()=>{
-          new tt.Marker().setLngLat(center).addTo(map)
-          for(let i =0; i<data.results.length;i++){
-            let name = data.results[i].poi.name
-            let name2= name.slice(0,10)
-            if(name2 !== 'Mm Cinemas'){
-              new tt.Popup().setLngLat([data.results[i].position.lon,data.results[i].position.lat+0.002]).setText(data.results[i].poi.name+' '+((data.results[i].dist)/1000).toFixed(2)+'Km').addTo(map)
-              new tt.Marker().setLngLat([data.results[i].position.lon,data.results[i].position.lat]).addTo(map)
+          cinemaBar(data.results)
+          map.on('load', ()=>{
+            new tt.Marker().setLngLat(center).addTo(map)
+            for(let i =0; i<data.results.length;i++){
+              let name = data.results[i].poi.name
+              let name2= name.slice(0,10)
+              if(name2 !== 'Mm Cinemas'){
+                new tt.Popup().setLngLat([data.results[i].position.lon,data.results[i].position.lat+0.002]).setText(data.results[i].poi.name+' '+((data.results[i].dist)/1000).toFixed(2)+'Km').addTo(map)
+                new tt.Marker().setLngLat([data.results[i].position.lon,data.results[i].position.lat]).addTo(map)
             }
           }
         })
-
-
         })
       });
   }
@@ -170,7 +167,7 @@ function tomtomAPI(urlRoutes) {
 
 function reverseGeocoding(url) {
   fetch(url)
-    .then(function (response) {
+    .then(function (response){
       response.json().then(function (data){
         console.log(data.addresses[0].address.municipality)
         city=data.addresses[0].address.municipality;
@@ -180,14 +177,14 @@ function reverseGeocoding(url) {
   
   
 function cinemaBar(cinema){
-    let arr = [];
-    cineBar.innerHTML=''
-    for(let i=0; i<cinema.length; i++){
-      if(cinema[i].poi.url && !arr.includes(cinema[i].poi.url)){
-        arr.push(cinema[i].poi.url)
-        console.log(cinema[i].poi.url)
-        cineBar.innerHTML+=`<a target="_blank" href="${cinema[i].poi.url}"><button class="bg-slate-700 px-5 text-white mx-5 my-5 rounded-md ">${cinema[i].poi.name}</button></a>`
-      }
+  let arr = [];
+  cineBar.innerHTML=''
+  for(let i=0; i<cinema.length; i++){  
+    if(cinema[i].poi.url && !arr.includes(cinema[i].poi.url)){
+      arr.push(cinema[i].poi.url)
+      console.log(cinema[i].poi.url)
+      cineBar.innerHTML+=`<a target="_blank" href="https://${cinema[i].poi.url}"><button class="bg-slate-700 px-5 text-white mx-5 my-5 rounded-md py-1 hover:opacity-75">${cinema[i].poi.name}</button></a>`
     }
   }
+}
  
