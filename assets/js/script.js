@@ -42,11 +42,20 @@ cities.addEventListener("click", function(event){
 
 
 btnEl.addEventListener('click',function(){
-    console.log(inputEl.value)
-    city=inputEl.value;
-    inputEl.value='';
-    geoUrl = "https://api.tomtom.com/search/2/geocode/"+city+".json?key=IWlwFtnFKKA6voxvGd7uWEcCNXeuXtI4&entityTypeSet=Municipality&countrySet=MX"
-    tomtomGeocoding(geoUrl)
+    if(inputEl.value!==''){
+      console.log(inputEl.value)
+      city=inputEl.value;
+      inputEl.value='';
+      geoUrl = "https://api.tomtom.com/search/2/geocode/"+city+".json?key=IWlwFtnFKKA6voxvGd7uWEcCNXeuXtI4&entityTypeSet=Municipality&countrySet=MX"
+      tomtomGeocoding(geoUrl)
+    } else {
+      $('#modal').removeClass('invisible')
+
+      $('#deactivate').on("click", function(){
+        $('#modal').addClass('invisible')
+      })
+    }
+    
 })
 
 
