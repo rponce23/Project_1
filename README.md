@@ -1,9 +1,10 @@
 # Cine Tracker
 
+<img src="https://img.shields.io/badge/License-MIT-blue"></img>
+
 ## Description
 
-This is the Project 1, and we built a Cine Tracker.
-This application is intended to people who wants to enjoy a movie and want to check all the posible options of movies//cinemas that the user has nearby so that the user can save time checking all the different cinemas that has nearby. So the application will show the movies available and the cinemas close to the user location.
+This application is intended to people who wants to enjoy a movie and want to check all the posible options of movies//cinemas that the user has nearby in a 4km radius so that the user can save time checking all the different cinemas that has nearby. So the application will show the movies available and the cinemas close to the user location with the link to their webpage to check their availability.
 
 ## Table of Contents
 
@@ -17,20 +18,9 @@ Be responsive.
 Have a polished UI.
 Be deployed to GitHub Pages.
 
-- [CSS-Framwork](#css-framework)
-- [Interactive](#interactive)
 - [API](#server-side-api)
-- [LocalStorage](#localstorage)
-- [Responsive](#responsive)
-- [User-Interface](#user-interface)
-- [Github-Deployed](#github-link)
+- [Github-Deployed](#links)
 
-
-## CSS-Framework
-We used Tailwind framwork to apply style to the application.
-
-## Interactive
-It is interactive to the user. The user can provide a city that want to locate cinemas.
 
 ## Server-Side-API
 The APIs used are: 
@@ -40,17 +30,11 @@ The APIs used are:
 - TomTom ReverseGeocoding
 - TheMovieDataBase API
 
-## LocalStorage
-The application uses Local Storage to store the cities where the user recently did a search. 
+## Mock-up
 
-## Responsive
-It is responsive since it adapt to the diffrent screen sizes
+The following images shows the app
 
-## User-Interface
-The application has a polished UI to make it friendly and easy to use.
-
-## Github-Link
-https://rponce23.github.io/Project_1/
+![Main Screen](/assets/images/Main%20Screen%20page.jpg) 
 
 ## Credits
 
@@ -58,9 +42,9 @@ Alejandro Salazar (https://github.com/Alexslzr)<br>
 Carlos Campos (https://github.com/carloxweb)<br>
 Raymundo Ponce (https://github.com/rponce23)<br>
 
-## Images
+## License
 
-![Main Screen](/assets/images/Main%20Screen%20page.jpg) 
+This project utilizes an MIT License. [Read more](https://choosealicense.com/licenses/mit/)
 
 ## Links
 
